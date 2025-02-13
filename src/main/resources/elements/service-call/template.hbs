@@ -72,7 +72,7 @@
         <removeProperty name="serviceCallParametersJson"/>
     {{/if-property}}
 
-    {{#if-property 'integrationOperationProtocolType' equals='ampq'}}
+    {{#if-property 'integrationOperationProtocolType' equals='amqp'}}
         <setProperty name="serviceCallMethod">
             <simple>{{property "integrationOperationMethod"}}</simple>
         </setProperty>
