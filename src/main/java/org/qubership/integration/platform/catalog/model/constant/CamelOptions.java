@@ -113,6 +113,9 @@ public final class CamelOptions {
 
     public static final String SDS_JOB_ID = "jobId";
 
+    public static final String ENABLE_IDEMPOTENCY_PROP = "enableIdempotency";
+    public static final String EXPIRY_PROP = "idempotencyKeyExpiry";
+
     @Deprecated(since = "23.1", forRemoval = true)
     public static final String MAAS_ENV_PROP_PREFIX = "maas.";
 
