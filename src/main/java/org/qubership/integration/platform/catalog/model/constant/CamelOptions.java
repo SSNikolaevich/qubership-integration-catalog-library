@@ -35,6 +35,7 @@ public final class CamelOptions {
     // kafka
     public static final String BROKERS = "brokers";
     public static final String TOPICS = "topics";
+    public static final String GROUP_ID = "groupId";
     public static final String SECURITY_PROTOCOL = "securityProtocol";
     public static final String SASL_MECHANISM = "saslMechanism";
     public static final String SASL_JAAS_CONFIG = "saslJaasConfig";
