@@ -18,6 +18,9 @@
                 ${exchangeProperty.CamelDuplicateMessage} == true
             </simple>
             {{#if-property 'actionOnDuplicate' equals='ignore'}}
+                {{#if-element-type equals="http-trigger"}}
+                <setHeader name="CamelHttpResponseCode"><constant>202</constant></setHeader>
+                {{/if-element-type}}
                 <process ref="interruptExchangeProcessor" />
             {{/if-property}}
             {{#if-property 'actionOnDuplicate' equals='throw-exception'}}
