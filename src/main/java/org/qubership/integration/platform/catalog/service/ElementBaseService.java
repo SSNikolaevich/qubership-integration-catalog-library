@@ -16,10 +16,10 @@
 
 package org.qubership.integration.platform.catalog.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.qubership.integration.platform.catalog.model.constant.CamelOptions;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
 import org.qubership.integration.platform.catalog.persistence.configs.repository.chain.ElementRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,16 +42,16 @@ public class ElementBaseService {
                 .orElseThrow(() -> new EntityNotFoundException(CHAIN_ELEMENT_WITH_ID_NOT_FOUND_MESSAGE + id));
     }
 
-    public Optional<ChainElement> findByIdOptional(String id) {
-        return elementRepository.findById(id);
-    }
-
     public <T extends ChainElement> T findById(String id, Class<T> elementClass) {
         ChainElement element = findById(id);
         if (elementClass.isAssignableFrom(element.getClass())) {
             return elementClass.cast(element);
         }
         return null;
+    }
+
+    public Optional<ChainElement> findByIdOptional(String id) {
+        return elementRepository.findById(id);
     }
 
     public void delete(ChainElement element) {

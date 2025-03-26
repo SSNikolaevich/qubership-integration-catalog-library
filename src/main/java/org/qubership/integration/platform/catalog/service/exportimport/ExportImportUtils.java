@@ -18,23 +18,20 @@ package org.qubership.integration.platform.catalog.service.exportimport;
 
 import com.fasterxml.jackson.core.JsonPointer;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.AbstractSystemEntity;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SpecificationSource;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.AbstractSystemEntity;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SpecificationSource;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-
-import static org.qubership.integration.platform.catalog.service.exportimport.ExportImportConstants.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +50,8 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import static org.qubership.integration.platform.catalog.service.exportimport.ExportImportConstants.*;
 
 @Slf4j
 public class ExportImportUtils {
@@ -89,14 +88,14 @@ public class ExportImportUtils {
         ArrayList<String> propsToExportInSeparateFile = getPropertiesToExportInSeparateFile(element);
 
         if (element.getType().startsWith(MAPPER)) {
-            prefix = propsToExportInSeparateFile.size() == 1 ?
-                    propsToExportInSeparateFile.get(0) : "mapper";
+            prefix = propsToExportInSeparateFile.size() == 1
+                    ? propsToExportInSeparateFile.get(0) : "mapper";
         } else {
-            prefix = propsToExportInSeparateFile.size() == 1 ?
-                    propsToExportInSeparateFile.get(0) : "properties";
+            prefix = propsToExportInSeparateFile.size() == 1
+                    ? propsToExportInSeparateFile.get(0) : "properties";
         }
-        String extension = properties != null && properties.containsKey(EXPORT_FILE_EXTENSION_PROPERTY) ?
-                properties.get(EXPORT_FILE_EXTENSION_PROPERTY).toString() : DEFAULT_EXTENSION;
+        String extension = properties != null && properties.containsKey(EXPORT_FILE_EXTENSION_PROPERTY)
+                ? properties.get(EXPORT_FILE_EXTENSION_PROPERTY).toString() : DEFAULT_EXTENSION;
         return prefix + "-" + element.getId() + "." + extension;
     }
 
@@ -104,7 +103,7 @@ public class ExportImportUtils {
         return SCRIPT + DASH + getIdOrCode(afterProp) + DASH + id + "." + GROOVY_EXTENSION;
     }
 
-    public static Object getIdOrCode(Map<String, Object> mapProp){
+    public static Object getIdOrCode(Map<String, Object> mapProp) {
         return mapProp.get(ID) == null ? mapProp.get(CODE) : mapProp.get(ID);
     }
 
@@ -177,6 +176,10 @@ public class ExportImportUtils {
         FileUtils.deleteQuietly(directory);
     }
 
+    public static void deleteFile(String directoryString) {
+        deleteFile(new File(directoryString));
+    }
+
     public static String getPureDomainName(String domainName) {
         String result = "";
         Pattern pattern = Pattern.compile("cloud-integration-platform-engine-(.*?)-v1");
@@ -191,8 +194,9 @@ public class ExportImportUtils {
         List<Map<String, Object>> afterList = (List<Map<String, Object>>) properties.get(AFTER);
         if (!CollectionUtils.isEmpty(afterList)) {
             for (Map<String, Object> after : afterList) {
-                if (null != after && SCRIPT.equals(after.get(TYPE)))
+                if (null != after && SCRIPT.equals(after.get(TYPE))) {
                     return true;
+                }
             }
         }
         return false;
@@ -204,8 +208,8 @@ public class ExportImportUtils {
     }
 
     public static boolean isScriptInServiceCall(ChainElement element) {
-        return SERVICE_CALL.equals(element.getType()) &&
-                (isAfterScriptInServiceCall(element.getProperties())
+        return SERVICE_CALL.equals(element.getType())
+                && (isAfterScriptInServiceCall(element.getProperties())
                         || isBeforeScriptInServiceCall(element.getProperties()));
     }
 
@@ -214,14 +218,16 @@ public class ExportImportUtils {
             List<Map<String, Object>> afterList = (List<Map<String, Object>>) element.getProperties().get(AFTER);
             if (!CollectionUtils.isEmpty(afterList)) {
                 for (Map<String, Object> after : afterList) {
-                    if (null != after && null != after.get(TYPE) && ((String) after.get(TYPE)).contains(MAPPER))
+                    if (null != after && null != after.get(TYPE) && ((String) after.get(TYPE)).contains(MAPPER)) {
                         return true;
+                    }
                 }
             }
             Map<String, Object> beforeProperties = (Map<String, Object>) element.getProperties().get(BEFORE);
             if (!CollectionUtils.isEmpty(beforeProperties)) {
-                if (null != beforeProperties.get(TYPE))
+                if (null != beforeProperties.get(TYPE)) {
                     return ((String) beforeProperties.get(TYPE)).contains(MAPPER);
+                }
             }
         }
         return false;
@@ -359,10 +365,6 @@ public class ExportImportUtils {
             return node.asText();
         }
         return null;
-    }
-
-    public static void deleteFile(String directoryString) {
-        deleteFile(new File(directoryString));
     }
 
     public static List<File> extractSystemsFromZip(File inputArchFile, String importFolderName) throws IOException {

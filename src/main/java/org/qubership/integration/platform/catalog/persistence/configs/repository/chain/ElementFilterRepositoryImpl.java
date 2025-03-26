@@ -16,15 +16,14 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.chain;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElementFilterRequestDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import org.qubership.integration.platform.catalog.model.filter.FilterCondition;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElementFilterRequestDTO;
 
 import java.util.*;
-
-import org.qubership.integration.platform.catalog.model.filter.FilterCondition;
 
 
 public class ElementFilterRepositoryImpl implements ElementFilterRepository {
@@ -44,7 +43,7 @@ public class ElementFilterRepositoryImpl implements ElementFilterRepository {
     private static final String EXTERNAL_ROUTE_PROPERTY = "externalRoute";
     private static final String INTEGRATION_OPERATION_PATH_PROPERTY = "integrationOperationPath";
     private static final String INTEGRATION_SPECIFICATION_ID = "integrationSpecificationId";
-    private final static Set<String> PROPERTIES_FILTER = Set.of(ROLES_PROPERTY, CONTEXT_PATH_PROPERTY, PRIVATE_ROUTE_PROPERTY, EXTERNAL_ROUTE_PROPERTY, INTEGRATION_OPERATION_PATH_PROPERTY, INTEGRATION_SPECIFICATION_ID);
+    private static final Set<String> PROPERTIES_FILTER = Set.of(ROLES_PROPERTY, CONTEXT_PATH_PROPERTY, PRIVATE_ROUTE_PROPERTY, EXTERNAL_ROUTE_PROPERTY, INTEGRATION_OPERATION_PATH_PROPERTY, INTEGRATION_SPECIFICATION_ID);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -105,9 +104,9 @@ public class ElementFilterRepositoryImpl implements ElementFilterRepository {
                         .toArray(new Predicate[0])
         );
 
-        return (!predicates.isEmpty() ?
-                query.where(finalPredicate) :
-                query);
+        return (!predicates.isEmpty()
+                ? query.where(finalPredicate)
+                : query);
     }
 
     private void addPermanentFiltersToQuery(CriteriaBuilder builder, List<String> types, Root<ChainElement> chainElementRoot, List<Predicate> predicates) {
@@ -250,15 +249,15 @@ public class ElementFilterRepositoryImpl implements ElementFilterRepository {
                 case INTERNAL_ROUTE_TYPE, EXTERNAL_ROUTE_TYPE -> {
                     Expression<Boolean> externalRouteExpression = getJsonPropertyBooleamExpression(builder, chainElementRoot, EXTERNAL_ROUTE_PROPERTY);
                     Boolean predicateFlag = value.equals(EXTERNAL_ROUTE_TYPE);
-                    typePredicate = typePredicate == null ?
-                            builder.equal(externalRouteExpression, predicateFlag) :
-                            builder.or(typePredicate, builder.equal(externalRouteExpression, predicateFlag));
+                    typePredicate = typePredicate == null
+                            ? builder.equal(externalRouteExpression, predicateFlag)
+                            : builder.or(typePredicate, builder.equal(externalRouteExpression, predicateFlag));
                 }
                 case PRIVATE_ROUTE_TYPE -> {
                     Expression<Boolean> privateRouteExpression = getJsonPropertyBooleamExpression(builder, chainElementRoot, PRIVATE_ROUTE_PROPERTY);
-                    typePredicate = typePredicate == null ?
-                            builder.equal(privateRouteExpression, true) :
-                            builder.or(typePredicate, builder.equal(privateRouteExpression, true));
+                    typePredicate = typePredicate == null
+                            ? builder.equal(privateRouteExpression, true)
+                            : builder.or(typePredicate, builder.equal(privateRouteExpression, true));
 
                 }
             }

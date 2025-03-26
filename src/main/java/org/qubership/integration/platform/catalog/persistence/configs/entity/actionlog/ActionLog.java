@@ -16,14 +16,13 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.entity.actionlog;
 
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.*;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.User;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import org.qubership.integration.platform.catalog.persistence.configs.entity.User;
 
 @Getter
 @Setter
@@ -63,7 +62,7 @@ public class ActionLog {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "id", column = @Column(name = "user_id"))
+            @AttributeOverride(name = "id", column = @Column(name = "user_id"))
     })
     protected User user;
 

@@ -20,10 +20,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import org.qubership.integration.platform.catalog.model.system.IntegrationSystemType;
-import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
-import org.qubership.integration.platform.catalog.util.CompareListUtils;
-
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +29,10 @@ import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.qubership.integration.platform.catalog.model.system.IntegrationSystemType;
+import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
+import org.qubership.integration.platform.catalog.util.CompareListUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,9 +76,9 @@ public class IntegrationSystem extends AbstractSystemEntity {
     private List<SpecificationGroup> specificationGroups = new LinkedList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "system"
-            ,orphanRemoval = true
-            ,cascade = {PERSIST,REMOVE,MERGE}
+    @OneToMany(mappedBy = "system",
+            orphanRemoval = true,
+            cascade = {PERSIST, REMOVE, MERGE}
     )
     private Set<IntegrationSystemLabel> labels = new LinkedHashSet<>();
 
@@ -127,20 +125,28 @@ public class IntegrationSystem extends AbstractSystemEntity {
     }
 
     public boolean equals(Object o, boolean strict) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
 
         IntegrationSystem that = (IntegrationSystem) o;
-        return super.equals(o, strict) &&
-                StringUtils.equals(this.getInternalServiceName(), that.getInternalServiceName()) &&
-                isLabelsEquals(that.getLabels(), strict) &&
-                isEnvironmentEquals(that.getEnvironments(), strict) &&
-                isSpecificationGroupEquals(that.getSpecificationGroups(), strict);
+        return super.equals(o, strict)
+                && StringUtils.equals(this.getInternalServiceName(), that.getInternalServiceName())
+                && isLabelsEquals(that.getLabels(), strict)
+                && isEnvironmentEquals(that.getEnvironments(), strict)
+                && isSpecificationGroupEquals(that.getSpecificationGroups(), strict);
     }
 
     private boolean isLabelsEquals(Set<IntegrationSystemLabel> newLabels, boolean strict) {

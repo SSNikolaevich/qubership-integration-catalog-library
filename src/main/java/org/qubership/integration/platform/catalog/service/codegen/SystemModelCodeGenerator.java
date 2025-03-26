@@ -16,12 +16,13 @@
 
 package org.qubership.integration.platform.catalog.service.codegen;
 
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
+
 import java.util.Map;
 import java.util.jar.Manifest;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
-
 public interface SystemModelCodeGenerator {
     Manifest generateManifest(SystemModel model);
+
     Map<String, String> generateCode(SystemModel model) throws Exception;
 }

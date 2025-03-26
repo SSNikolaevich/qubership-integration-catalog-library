@@ -16,18 +16,17 @@
 
 package org.qubership.integration.platform.catalog.service.grpc.codegen;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SpecificationSource;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SpecificationSource;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
+import org.qubership.integration.platform.catalog.service.codegen.SystemModelCodeGenerator;
+import org.qubership.integration.platform.catalog.service.codegen.TargetProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
-import org.qubership.integration.platform.catalog.service.codegen.SystemModelCodeGenerator;
-import org.qubership.integration.platform.catalog.service.codegen.TargetProtocol;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -116,8 +115,8 @@ public class GrpcCodeGenerator implements SystemModelCodeGenerator {
             String compilerOutput = new String(IOUtils.toByteArray(process.getErrorStream()))
                     .replace(rootDirectory.toString(), "");
             String message = String.format(
-                    "Protocol buffer definition compiler returned non-zero exit code: %d." +
-                            " Protobuf compiler output:\n%s",
+                    "Protocol buffer definition compiler returned non-zero exit code: %d."
+                            + " Protobuf compiler output:\n%s",
                     exitCode, compilerOutput);
             log.error(message);
             throw new Exception(message);

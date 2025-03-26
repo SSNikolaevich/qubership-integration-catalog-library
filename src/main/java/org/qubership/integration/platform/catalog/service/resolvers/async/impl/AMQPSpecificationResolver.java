@@ -28,16 +28,15 @@ import org.qubership.integration.platform.catalog.model.system.asyncapi.componen
 import org.qubership.integration.platform.catalog.persistence.configs.entity.system.Operation;
 import org.qubership.integration.platform.catalog.service.resolvers.async.AsyncApiSpecificationResolver;
 import org.qubership.integration.platform.catalog.service.resolvers.async.AsyncResolver;
-
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.AMQP_BINDING_CLASS;
-import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.CONVERTING_OPERATION_TO_JSON_ERROR;
-
 import java.util.Collections;
 import java.util.List;
+
+import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.AMQP_BINDING_CLASS;
+import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.CONVERTING_OPERATION_TO_JSON_ERROR;
 
 @Service
 @AsyncResolver(AMQP_BINDING_CLASS)
@@ -68,19 +67,15 @@ public class AMQPSpecificationResolver implements AsyncApiSpecificationResolver 
         ObjectNode specificationNode = objectMapper.createObjectNode();
         try {
             JsonNode allBindings = objectMapper.readTree(objectMapper.writeValueAsString(channel.getBindings()));
-            JsonNode amqpBindings = allBindings.get(SPECIFICATION_AMQP);
-
-            specificationNode.set(PROPERTY_USERNAME, amqpBindings.get(SPECIFICATION_USER_ID));
-
-            JsonNode queueBindings = amqpBindings.get(SPECIFICATION_QUEUE);
-            specificationNode.set(PROPERTY_QUEUE_NAME, queueBindings.get(SPECIFICATION_NAME));
-
-            JsonNode exchangeBinding = amqpBindings.get(SPECIFICATION_EXCHANGE);
-            specificationNode.set(PROPERTY_EXCHANGE_NAME, exchangeBinding.get(SPECIFICATION_NAME));
-
+            JsonNode amqpBindings = allBindings.path(SPECIFICATION_AMQP);
+            if (!amqpBindings.isMissingNode() && !amqpBindings.isNull()) {
+                addIfNotNull(specificationNode, PROPERTY_USERNAME, amqpBindings.get(SPECIFICATION_USER_ID));
+                addIfNotNull(specificationNode, PROPERTY_QUEUE_NAME, amqpBindings.at("/" + SPECIFICATION_QUEUE + "/" + SPECIFICATION_NAME));
+                addIfNotNull(specificationNode, PROPERTY_EXCHANGE_NAME, amqpBindings.at("/" + SPECIFICATION_EXCHANGE + "/" + SPECIFICATION_NAME));
+            }
             return specificationNode;
         } catch (JsonProcessingException e) {
-            throw new SpecificationImportException(CONVERTING_OPERATION_TO_JSON_ERROR,e);
+            throw new SpecificationImportException(CONVERTING_OPERATION_TO_JSON_ERROR, e);
         }
     }
 
@@ -95,5 +90,11 @@ public class AMQPSpecificationResolver implements AsyncApiSpecificationResolver 
     @Override
     public void setUpOperationMessages(Operation operation, OperationObject operationObject, Components components) {
 
+    }
+
+    private void addIfNotNull(ObjectNode node, String key, JsonNode value) {
+        if (value != null && !value.isMissingNode() && !value.isNull()) {
+            node.set(key, value);
+        }
     }
 }

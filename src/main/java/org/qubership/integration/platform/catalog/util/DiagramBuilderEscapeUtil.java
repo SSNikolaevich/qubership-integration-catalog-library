@@ -16,10 +16,10 @@
 
 package org.qubership.integration.platform.catalog.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.qubership.integration.platform.catalog.model.designgenerator.DiagramConstants;
 import org.qubership.integration.platform.catalog.model.designgenerator.ReservedPlaceholders;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -107,9 +107,9 @@ public class DiagramBuilderEscapeUtil {
                     break;
                 default:
                     Object property = currentElement.getProperties().getOrDefault(entry.getValue(), DiagramConstants.EMPTY_PROPERTY_STUB);
-                    replacement = property == null || StringUtils.isEmpty(property.toString()) ?
-                        DiagramConstants.EMPTY_PROPERTY_STUB :
-                        property.toString();
+                    replacement = property == null || StringUtils.isEmpty(property.toString())
+                            ? DiagramConstants.EMPTY_PROPERTY_STUB
+                            : property.toString();
                     break;
             }
             result = result.replace(entry.getKey(), replacement);

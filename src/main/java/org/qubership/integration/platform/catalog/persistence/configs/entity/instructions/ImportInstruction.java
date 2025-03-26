@@ -23,11 +23,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Formula;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import org.qubership.integration.platform.catalog.model.exportimport.instructions.ImportEntityType;
 import org.qubership.integration.platform.catalog.model.exportimport.instructions.ImportInstructionAction;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -88,8 +87,12 @@ public class ImportInstruction {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ImportInstruction that = (ImportInstruction) o;
         return Objects.equals(id, that.id);
     }

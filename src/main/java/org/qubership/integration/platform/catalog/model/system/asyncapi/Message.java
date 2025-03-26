@@ -16,9 +16,9 @@
 
 package org.qubership.integration.platform.catalog.model.system.asyncapi;
 
-import org.qubership.integration.platform.catalog.model.system.asyncapi.components.SchemaObject;
 import lombok.Getter;
 import lombok.Setter;
+import org.qubership.integration.platform.catalog.model.system.asyncapi.components.SchemaObject;
 
 import java.util.List;
 import java.util.Map;
@@ -29,10 +29,11 @@ public class Message {
     private String name;
     private SchemaObject headers;
     private SchemaObject payload;
-    private List<Map<String,Object>> oneOf;
-    private List<Map<String,Object>> allOf;
-    private List<Map<String,Object>> anyOf;
+    private List<Map<String, Object>> oneOf;
+    private List<Map<String, Object>> allOf;
+    private List<Map<String, Object>> anyOf;
     @Getter
     @Setter
+    @SuppressWarnings("checkstyle:MemberName")
     private String $ref;
 }

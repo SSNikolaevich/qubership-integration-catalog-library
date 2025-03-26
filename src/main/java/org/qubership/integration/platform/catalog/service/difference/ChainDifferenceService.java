@@ -16,18 +16,17 @@
 
 package org.qubership.integration.platform.catalog.service.difference;
 
+import org.apache.commons.lang3.StringUtils;
+import org.qubership.integration.platform.catalog.exception.ChainDifferenceClientException;
+import org.qubership.integration.platform.catalog.exception.ComparisonEntityNotFoundException;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Chain;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Snapshot;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
 import org.qubership.integration.platform.catalog.persistence.configs.repository.chain.ChainRepository;
 import org.qubership.integration.platform.catalog.persistence.configs.repository.chain.SnapshotBaseRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import org.qubership.integration.platform.catalog.exception.ChainDifferenceClientException;
-import org.qubership.integration.platform.catalog.exception.ComparisonEntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -67,7 +66,7 @@ public class ChainDifferenceService {
      *
      * @param entityDiffRequest contains chain ids/snapshot ids
      * @return difference result containing the left and right chain/snapshot entities,
-     * as well as a list of difference result objects of chain elements
+     *      as well as a list of difference result objects of chain elements
      */
     public EntityDifferenceResult findChainsDifferences(ChainDifferenceRequest entityDiffRequest) {
         if (entityDiffRequest.getLeftSnapshotId() != null) {
@@ -186,9 +185,9 @@ public class ChainDifferenceService {
         if (!StringUtils.equals(leftElement.getType(), rightElement.getType())) {
             return false;
         }
-        return StringUtils.equals(leftElement.getName(), rightElement.getName()) &&
-                StringUtils.equals(leftElement.getDescription(), rightElement.getDescription()) &&
-                leftElement.getProperties().equals(rightElement.getProperties());
+        return StringUtils.equals(leftElement.getName(), rightElement.getName())
+                && StringUtils.equals(leftElement.getDescription(), rightElement.getDescription())
+                && leftElement.getProperties().equals(rightElement.getProperties());
     }
 
     private List<ChainElement> filterOutElementsFromSwimlanes(List<ChainElement> elements) {

@@ -17,15 +17,12 @@
 package org.qubership.integration.platform.catalog.service.difference;
 
 import com.google.common.collect.ImmutableMap;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.service.difference.ChainElementDifferenceService;
-import org.qubership.integration.platform.catalog.service.difference.DifferenceResult;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -116,14 +113,12 @@ public class ChainElementDifferenceServiceTest {
                                 .name("HTTP Trigger")
                                 .description("HTTP Trigger description")
                                 .originalId("53a6b1a0-56f0-402c-82fa-fbc87c4ef8d0")
-                                .properties(new HashMap<>() {
-                                    {
-                                        put("chunked", true);
-                                        put("accessControlType", "RBAC");
-                                        put("httpBinding", "left/handlingHttpBinding");
-                                        put("contextPath", null);
-                                    }
-                                })
+                                .properties(ImmutableMap.<String, Object>builder()
+                                        .put("chunked", true)
+                                        .put("accessControlType", "RBAC")
+                                        .put("httpBinding", "left/handlingHttpBinding")
+                                        //.put("contextPath", null)
+                                        .build())
                                 .build(),
                         ChainElement.builder()
                                 .id(MOCKED_UUID)

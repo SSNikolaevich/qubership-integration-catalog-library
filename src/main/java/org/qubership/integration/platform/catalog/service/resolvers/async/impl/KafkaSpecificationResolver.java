@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.qubership.integration.platform.catalog.exception.SpecificationImportException;
 import org.qubership.integration.platform.catalog.model.system.asyncapi.Channel;
 import org.qubership.integration.platform.catalog.model.system.asyncapi.Message;
@@ -32,17 +33,15 @@ import org.qubership.integration.platform.catalog.persistence.configs.entity.sys
 import org.qubership.integration.platform.catalog.service.resolvers.async.AsyncApiSchemaResolver;
 import org.qubership.integration.platform.catalog.service.resolvers.async.AsyncApiSpecificationResolver;
 import org.qubership.integration.platform.catalog.service.resolvers.async.AsyncResolver;
-
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.KAFKA_BINDING_CLASS;
-
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.qubership.integration.platform.catalog.service.resolvers.async.AsyncConstants.KAFKA_BINDING_CLASS;
 
 
 @Service
@@ -122,7 +121,7 @@ public class KafkaSpecificationResolver implements AsyncApiSpecificationResolver
             try {
                 importedComponents = objectMapper.readTree(objectMapper.writeValueAsString(components));
             } catch (JsonProcessingException e) {
-                throw new SpecificationImportException(COMPONENTS_CONVERTING_ERROR,e);
+                throw new SpecificationImportException(COMPONENTS_CONVERTING_ERROR, e);
             }
 
             if (message.get$ref() != null) {
@@ -192,7 +191,7 @@ public class KafkaSpecificationResolver implements AsyncApiSpecificationResolver
             String resolvedSchema = asyncApiSchemaResolver.resolveRef(ref, importedComponents);
             return new MutablePair<>(refName, objectMapper.readTree(resolvedSchema));
         } catch (JsonProcessingException e) {
-            throw new SpecificationImportException(SCHEMA_RESOLVING_ERROR,e);
+            throw new SpecificationImportException(SCHEMA_RESOLVING_ERROR, e);
         }
     }
 }

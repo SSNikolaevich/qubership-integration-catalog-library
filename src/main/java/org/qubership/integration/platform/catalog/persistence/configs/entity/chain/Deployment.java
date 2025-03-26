@@ -16,21 +16,20 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.entity.chain;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.User;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.qubership.integration.platform.catalog.model.chain.LogLoggingLevel;
+import org.qubership.integration.platform.catalog.model.chain.LogPayloadLevel;
+import org.qubership.integration.platform.catalog.model.chain.SessionsLoggingLevelDeprecated;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.User;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import org.qubership.integration.platform.catalog.model.chain.LogLoggingLevel;
-import org.qubership.integration.platform.catalog.model.chain.LogPayloadLevel;
-import org.qubership.integration.platform.catalog.model.chain.SessionsLoggingLevelDeprecated;
-
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -59,8 +58,8 @@ public class Deployment implements Serializable {
     @CreatedBy
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "id", column = @Column(name = "created_by_id")),
-            @AttributeOverride( name = "username", column = @Column(name = "created_by_name"))
+            @AttributeOverride(name = "id", column = @Column(name = "created_by_id")),
+            @AttributeOverride(name = "username", column = @Column(name = "created_by_name"))
     })
     private User createdBy;
 

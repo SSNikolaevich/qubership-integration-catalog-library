@@ -16,12 +16,11 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.system;
 
+import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.system.IntegrationSystem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-
-import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.system.IntegrationSystem;
 
 import java.util.List;
 
@@ -33,6 +32,7 @@ public interface SystemRepository extends JpaRepository<IntegrationSystem, Strin
 
     /**
      * Find all systems with at least one not deprecated model
+     *
      * @return
      */
     @Query(value =
@@ -56,7 +56,7 @@ public interface SystemRepository extends JpaRepository<IntegrationSystem, Strin
     List<IntegrationSystem> findAllByNotDeprecatedAndWithSpecsAndModelType(List<OperationProtocol> modelType);
 
     @Query(nativeQuery = true,
-            value= """
+            value = """
                     SELECT * FROM catalog.integration_system sys WHERE sys.id = :searchCondition
                     UNION
                     SELECT * FROM catalog.integration_system sys

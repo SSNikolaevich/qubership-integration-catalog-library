@@ -16,11 +16,10 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.system;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import org.qubership.integration.platform.catalog.model.system.SystemModelSource;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SystemModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -37,9 +36,9 @@ public interface SystemModelRepository extends JpaRepository<SystemModel, String
 
     long countBySpecificationGroupIdAndVersion(String specificationId, String version);
 
-    @Query("select model.id, lib.modifiedWhen " +
-            "from SystemModel model " +
-            "inner join model.compiledLibrary lib " +
-            "where lib.data is not null")
+    @Query("select model.id, lib.modifiedWhen "
+            + "from SystemModel model "
+            + "inner join model.compiledLibrary lib "
+            + "where lib.data is not null")
     List<Object[]> findAllWithCompiledLibraries();
 }

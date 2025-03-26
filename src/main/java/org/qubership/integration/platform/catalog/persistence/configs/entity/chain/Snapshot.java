@@ -16,8 +16,6 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.entity.chain;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
@@ -25,9 +23,10 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import org.qubership.integration.platform.catalog.persistence.configs.entity.AbstractEntity;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Types;
 import java.util.*;
@@ -48,19 +47,20 @@ public class Snapshot extends AbstractEntity {
     @JdbcTypeCode(Types.LONGVARCHAR)
     @Column(name = "xml_configuration", columnDefinition = "text")
     private String xmlDefinition;
+
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "chain_id")
     private Chain chain;
 
     @Builder.Default
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH })
+    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH, REMOVE  })
     private List<Deployment> deployments = new LinkedList<>();
 
     @Builder.Default
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH })
+    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH, REMOVE })
     @Column(name = "element_id")
     private List<ChainElement> elements = new LinkedList<>();
 
@@ -74,14 +74,14 @@ public class Snapshot extends AbstractEntity {
 
     @Builder.Default
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH })
+    @OneToMany(mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = { PERSIST, MERGE, REFRESH, DETACH, REMOVE })
     @Column
     private Set<MaskedField> maskedFields = new LinkedHashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "snapshot"
-            ,orphanRemoval = true
-            ,cascade = {PERSIST,REMOVE,MERGE}
+    @OneToMany(mappedBy = "snapshot",
+            orphanRemoval = true,
+            cascade = {PERSIST, REMOVE, MERGE}
     )
     private Set<SnapshotLabel> labels = new LinkedHashSet<>();
 

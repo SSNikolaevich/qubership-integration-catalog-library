@@ -16,10 +16,6 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.entity.chain;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ContainerChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.diagnostic.ValidationChainAlert;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +25,10 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ContainerChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.diagnostic.ValidationChainAlert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,11 +51,11 @@ public class Chain extends FoldableEntity {
     private List<ChainElement> elements = new LinkedList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "chain", cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chain", cascade = {PERSIST, MERGE, REFRESH, DETACH, REMOVE}, fetch = FetchType.LAZY)
     private List<Snapshot> snapshots = new LinkedList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "chain", cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chain", cascade = {PERSIST, MERGE, REFRESH, DETACH, REMOVE}, fetch = FetchType.LAZY)
     private List<Deployment> deployments = new LinkedList<>();
 
     @Builder.Default
@@ -76,9 +76,9 @@ public class Chain extends FoldableEntity {
     private Set<MaskedField> maskedFields = new LinkedHashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "chain"
-            ,orphanRemoval = true
-            ,cascade = {PERSIST,REMOVE,MERGE}
+    @OneToMany(mappedBy = "chain",
+            orphanRemoval = true,
+            cascade = {PERSIST, REMOVE, MERGE}
     )
     private Set<ChainLabel> labels = new LinkedHashSet<>();
 
@@ -108,7 +108,7 @@ public class Chain extends FoldableEntity {
     private String assumptions;
     private String outOfScope;
 
-    @Column(name="last_import_hash")
+    @Column(name = "last_import_hash")
     private String lastImportHash;
 
     /**

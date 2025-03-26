@@ -18,8 +18,7 @@ package org.qubership.integration.platform.catalog.persistence.configs.entity.sy
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.qubership.integration.platform.catalog.util.HashUtils;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +28,7 @@ import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.jetbrains.annotations.Nullable;
-
-import jakarta.persistence.*;
+import org.qubership.integration.platform.catalog.util.HashUtils;
 
 @Getter
 @Setter
@@ -75,17 +73,25 @@ public class SpecificationSource extends AbstractSystemEntity {
     }
 
     public boolean equals(Object o, boolean strict) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
 
         SpecificationSource that = (SpecificationSource) o;
-        return super.equals(o, strict) &&
-                StringUtils.equals(getSourceHash(), that.getSourceHash());
+        return super.equals(o, strict)
+                && StringUtils.equals(getSourceHash(), that.getSourceHash());
     }
 
     public abstract static class SpecificationSourceBuilder<C extends SpecificationSource, B extends SpecificationSourceBuilder<C, B>> extends AbstractSystemEntityBuilder<C, B> {

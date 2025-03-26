@@ -16,10 +16,9 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.common;
 
-import org.springframework.stereotype.Repository;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
@@ -111,12 +110,11 @@ class CommonRepositoryImpl<T> implements CommonRepository<T> {
     }
 
     private <S extends T> Iterable<S> getFilteredEntities(Supplier<Stream<S>> entitiesToBeFiltered, Supplier<Stream<S>> entitiesAsFilter, Comparator<S> filterEntityMatcher, boolean isMatched) {
-        Predicate<? super S> filterPredicate = isMatched ?
-                (entityToBeFiltered) -> entitiesAsFilter
+        Predicate<? super S> filterPredicate = isMatched
+                ? (entityToBeFiltered) -> entitiesAsFilter
                         .get()
                         .anyMatch(entityAsFilter -> filterEntityMatcher.compare(entityToBeFiltered, entityAsFilter) == 0)
-                :
-                (entityToBeFiltered) -> entitiesAsFilter
+                : (entityToBeFiltered) -> entitiesAsFilter
                         .get()
                         .noneMatch(entityAsFilter -> filterEntityMatcher.compare(entityToBeFiltered, entityAsFilter) == 0);
 

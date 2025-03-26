@@ -21,13 +21,13 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.proxy.HibernateProxy;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 /**
  * Finds the differences between two entities, using fields marked with {@link DifferenceMember}.
@@ -70,7 +70,7 @@ public abstract class EntityDifferenceService<T> {
                         field.setAccessible(true);
                         Object fieldValue = field.get(finalObject);
                         Map<String, Object> resultMap = new HashMap<>();
-                        if (fieldValue instanceof Map<?,?> fieldValueMap) {
+                        if (fieldValue instanceof Map<?, ?> fieldValueMap) {
                             for (Object key : fieldValueMap.keySet()) {
                                 Object value = fieldValueMap.get(key);
                                 if (value != null) {

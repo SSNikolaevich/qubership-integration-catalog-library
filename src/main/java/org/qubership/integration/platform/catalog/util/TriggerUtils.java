@@ -16,13 +16,13 @@
 
 package org.qubership.integration.platform.catalog.util;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.qubership.integration.platform.catalog.model.ElementRoute;
 import org.qubership.integration.platform.catalog.model.constant.CamelNames;
 import org.qubership.integration.platform.catalog.model.constant.CamelOptions;
 import org.qubership.integration.platform.catalog.model.system.ServiceEnvironment;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
 
 import java.nio.file.Paths;
@@ -91,7 +91,7 @@ public class TriggerUtils {
 
     public static String getHttpTriggerBasePath(ChainElement element) {
         ServiceEnvironment environment = element.getEnvironment();
-        String base = isNull(environment)? "" : environment.getAddress();
+        String base = isNull(environment) ? "" : environment.getAddress();
         if (isNull(base)) {
             base = "";
         }
@@ -144,26 +144,26 @@ public class TriggerUtils {
     }
 
     public static boolean isImplementedServiceTrigger(ChainElement element) {
-        return StringUtils.isNotBlank((String)element.getProperties().get(CamelOptions.OPERATION_PATH));
+        return StringUtils.isNotBlank((String) element.getProperties().get(CamelOptions.OPERATION_PATH));
     }
 
     public static boolean isCustomUriHttpTrigger(ChainElement element) {
-        return StringUtils.isNotBlank((String)element.getProperties().get(CamelOptions.CONTEXT_PATH));
+        return StringUtils.isNotBlank((String) element.getProperties().get(CamelOptions.CONTEXT_PATH));
     }
 
     public static String getImplementedServiceTriggerSystemId(ChainElement element) {
-        return (String)element.getProperties().get(CamelOptions.SYSTEM_ID);
+        return (String) element.getProperties().get(CamelOptions.SYSTEM_ID);
     }
 
     public static String getImplementedServiceTriggerSpecificationId(ChainElement element) {
-        return (String)element.getProperties().get(CamelOptions.MODEL_ID);
+        return (String) element.getProperties().get(CamelOptions.MODEL_ID);
     }
 
     public static String getImplementedServiceTriggerOperationId(ChainElement element) {
-        return (String)element.getProperties().get(CamelOptions.OPERATION_ID);
+        return (String) element.getProperties().get(CamelOptions.OPERATION_ID);
     }
 
     public static String getHttpTriggerValidationSchema(ChainElement element) {
-        return (String)element.getProperties().get(CamelOptions.VALIDATION_SCHEMA);
+        return (String) element.getProperties().get(CamelOptions.VALIDATION_SCHEMA);
     }
 }

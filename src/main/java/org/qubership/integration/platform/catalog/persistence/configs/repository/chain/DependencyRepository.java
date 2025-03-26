@@ -16,13 +16,12 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.chain;
 
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Dependency;
 import org.qubership.integration.platform.catalog.persistence.configs.repository.common.CommonRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Dependency;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,13 +29,13 @@ import java.util.Optional;
 @Repository
 public interface DependencyRepository extends CommonRepository<Dependency>, JpaRepository<Dependency, String> {
 
-    @Query(value = "SELECT d FROM dependencies d " +
-            "WHERE d.elementFrom.id = :from " +
-            "and d.elementTo.id = :to")
+    @Query(value = "SELECT d FROM dependencies d "
+            + "WHERE d.elementFrom.id = :from "
+            + "and d.elementTo.id = :to")
     Optional<Dependency> findByFromAndTo(@Param("from") String from, @Param("to") String to);
 
-    @Query(value = "SELECT d FROM dependencies d " +
-                   "WHERE d.elementFrom.id in :elementIDs " +
-                   "or d.elementTo.id in :elementIDs")
+    @Query(value = "SELECT d FROM dependencies d "
+            + "WHERE d.elementFrom.id in :elementIDs "
+            + "or d.elementTo.id in :elementIDs")
     List<Dependency> findByElementIDs(List<String> elementIDs);
 }

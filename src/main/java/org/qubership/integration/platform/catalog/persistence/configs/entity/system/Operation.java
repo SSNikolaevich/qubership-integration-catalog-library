@@ -18,15 +18,16 @@ package org.qubership.integration.platform.catalog.persistence.configs.entity.sy
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Chain;
-
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
-
-import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Chain;
 
 import java.util.List;
 import java.util.Map;
@@ -70,23 +71,29 @@ public class Operation extends AbstractSystemEntity {
 
     @Override
     public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-                o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() :
-                this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
         Operation operation = (Operation) o;
         return getId() != null && Objects.equals(getId(), operation.getId());
     }
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-                getClass().hashCode();
+        return this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
     }
 }

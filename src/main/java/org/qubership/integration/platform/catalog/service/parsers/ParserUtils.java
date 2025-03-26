@@ -19,6 +19,8 @@ package org.qubership.integration.platform.catalog.service.parsers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.models.OpenAPI;
+import lombok.extern.slf4j.Slf4j;
 import org.qubership.integration.platform.catalog.exception.SpecificationImportException;
 import org.qubership.integration.platform.catalog.exception.SpecificationSimilarVersionException;
 import org.qubership.integration.platform.catalog.model.system.EnvironmentDefaultParameters;
@@ -26,9 +28,6 @@ import org.qubership.integration.platform.catalog.model.system.OperationProtocol
 import org.qubership.integration.platform.catalog.model.system.asyncapi.AsyncapiSpecification;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.system.SpecificationGroup;
 import org.qubership.integration.platform.catalog.service.SystemModelBaseService;
-
-import io.swagger.v3.oas.models.OpenAPI;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -71,8 +70,9 @@ public class ParserUtils {
 
     private String checkSimilarVersions(String specificationGroupId, String version) {
         long count = systemModelBaseService.countBySpecificationGroupIdAndVersion(specificationGroupId, version);
-        if (count > 0)
+        if (count > 0) {
             throw new SpecificationSimilarVersionException(version);
+        }
         return version;
     }
 
@@ -84,9 +84,9 @@ public class ParserUtils {
     public JsonNode receiveEmptyProperties(OperationProtocol protocol) {
         try {
             return jsonMapper.readTree(
-                    OperationProtocol.AMQP.equals(protocol) ?
-                            jsonMapper.writeValueAsString(EnvironmentDefaultParameters.RABBIT_ENVIRONMENT_PARAMETERS):
-                            jsonMapper.writeValueAsString(EnvironmentDefaultParameters.KAFKA_ENVIRONMENT_PARAMETERS));
+                    OperationProtocol.AMQP.equals(protocol)
+                            ? jsonMapper.writeValueAsString(EnvironmentDefaultParameters.RABBIT_ENVIRONMENT_PARAMETERS)
+                            : jsonMapper.writeValueAsString(EnvironmentDefaultParameters.KAFKA_ENVIRONMENT_PARAMETERS));
         } catch (JsonProcessingException e) {
             throw new SpecificationImportException("Error while receiving environment properties for " + protocol + " protocol", e);
         }

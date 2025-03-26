@@ -16,10 +16,9 @@
 
 package org.qubership.integration.platform.catalog.service.resolvers.wsdl;
 
+import org.qubership.integration.platform.catalog.model.system.WsdlVersion;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
-import org.qubership.integration.platform.catalog.model.system.WsdlVersion;
 
 public class WsdlVersionParserHandler extends DefaultHandler {
 
@@ -27,13 +26,13 @@ public class WsdlVersionParserHandler extends DefaultHandler {
     private static final String DESCRIPTION_TAG_NAME = "description";
 
     @Override
-    public void startDocument(){
+    public void startDocument() {
         this.version = WsdlVersion.WSDL_1;
     }
 
     @Override
     public void startElement(String uri, String lName, String qName, Attributes attr) {
-        if (qName.contains(DESCRIPTION_TAG_NAME)){
+        if (qName.contains(DESCRIPTION_TAG_NAME)) {
             this.version = WsdlVersion.WSDL_2;
         }
     }

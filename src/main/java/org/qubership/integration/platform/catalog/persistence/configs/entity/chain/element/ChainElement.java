@@ -17,6 +17,15 @@
 package org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element;
 
 import com.google.common.collect.Maps;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.proxy.HibernateProxy;
 import org.qubership.integration.platform.catalog.model.system.ServiceEnvironment;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.AbstractEntity;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Chain;
@@ -24,17 +33,6 @@ import org.qubership.integration.platform.catalog.persistence.configs.entity.cha
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.Snapshot;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.diagnostic.ValidationChainAlert;
 import org.qubership.integration.platform.catalog.service.difference.DifferenceMember;
-
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Type;
-
-import jakarta.persistence.*;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.util.*;
 
@@ -79,12 +77,12 @@ public class ChainElement extends AbstractEntity {
 
     @Builder.Default
     @OrderBy("elementFrom.id")
-    @OneToMany(mappedBy = "elementTo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "elementTo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Dependency> inputDependencies = new LinkedList<>();
 
     @Builder.Default
     @OrderBy("elementTo.id")
-    @OneToMany(mappedBy = "elementFrom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "elementFrom", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Dependency> outputDependencies = new LinkedList<>();
 
     @Builder.Default
@@ -146,11 +144,21 @@ public class ChainElement extends AbstractEntity {
 
     @Override
     public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
         ChainElement that = (ChainElement) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }

@@ -20,21 +20,20 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.qubership.integration.platform.catalog.exception.SpecificationImportException;
-import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.qubership.integration.platform.catalog.exception.SpecificationImportException;
+import org.qubership.integration.platform.catalog.model.system.OperationProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.qubership.integration.platform.catalog.service.parsers.SpecificationParser.SPECIFICATION_FILE_PROCESSING_ERROR;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Stream;
+
+import static org.qubership.integration.platform.catalog.service.parsers.SpecificationParser.SPECIFICATION_FILE_PROCESSING_ERROR;
 
 @Slf4j
 @Service
@@ -78,13 +77,13 @@ public class ProtocolExtractionService {
         String fileExtension = FilenameUtils.getExtension(files.stream()
                 .map(MultipartFile::getOriginalFilename).findFirst().orElse(""));
 
-        if (WSDL_EXTENSION.equalsIgnoreCase(fileExtension) ||
-                XSD_EXTENSION.equalsIgnoreCase(fileExtension)) {
+        if (WSDL_EXTENSION.equalsIgnoreCase(fileExtension)
+                || XSD_EXTENSION.equalsIgnoreCase(fileExtension)) {
             return OperationProtocol.SOAP;
         }
 
-        if (GRAPHQL_EXTENSION.equalsIgnoreCase(fileExtension) ||
-                GRAPHQLS_EXTENSION.equalsIgnoreCase(fileExtension)) {
+        if (GRAPHQL_EXTENSION.equalsIgnoreCase(fileExtension)
+                || GRAPHQLS_EXTENSION.equalsIgnoreCase(fileExtension)) {
             return OperationProtocol.GRAPHQL;
         }
 
@@ -93,8 +92,8 @@ public class ProtocolExtractionService {
         }
 
         try {
-            if (YAML_EXTENSION.equalsIgnoreCase(fileExtension) ||
-                    YML_EXTENSION.equalsIgnoreCase(fileExtension)) {
+            if (YAML_EXTENSION.equalsIgnoreCase(fileExtension)
+                    || YML_EXTENSION.equalsIgnoreCase(fileExtension)) {
                 return getProtocolFromYaml(files);
             } else {
                 return getProtocolFromJson(files);

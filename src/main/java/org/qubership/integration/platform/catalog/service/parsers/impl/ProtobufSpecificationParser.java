@@ -20,6 +20,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.squareup.wire.schema.Field;
+import com.squareup.wire.schema.Location;
+import com.squareup.wire.schema.internal.parser.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.qubership.integration.platform.catalog.exception.SpecificationImportException;
 import org.qubership.integration.platform.catalog.exception.SpecificationSimilarIdException;
 import org.qubership.integration.platform.catalog.persistence.configs.entity.system.Operation;
@@ -30,12 +35,6 @@ import org.qubership.integration.platform.catalog.persistence.configs.repository
 import org.qubership.integration.platform.catalog.service.parsers.Parser;
 import org.qubership.integration.platform.catalog.service.parsers.ParserUtils;
 import org.qubership.integration.platform.catalog.service.parsers.SpecificationParser;
-import com.squareup.wire.schema.Field;
-import com.squareup.wire.schema.Location;
-import com.squareup.wire.schema.internal.parser.*;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -50,9 +49,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.qubership.integration.platform.catalog.service.schemas.SchemasConstants.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static org.qubership.integration.platform.catalog.service.schemas.SchemasConstants.*;
 
 
 @Slf4j
@@ -61,7 +60,7 @@ import static java.util.Objects.nonNull;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ProtobufSpecificationParser implements SpecificationParser {
     private static final String JAVA_PACKAGE_OPTION_NAME = "java_package";
-    private static final Pattern mapTypeRegex =
+    private static final Pattern MAP_TYPE_REGEX =
             Pattern.compile("^map<\\s*([a-zA-Z0-9_\\-.]+)\\s*,\\s*([a-zA-Z0-9_\\-.]+)\\s*>$");
 
     private final SystemModelRepository systemModelRepository;
@@ -253,7 +252,7 @@ public class ProtobufSpecificationParser implements SpecificationParser {
     private JsonNode buildFieldType(FieldElement fieldElement, Function<String, String> typeResolver) {
         ObjectNode type;
 
-        Matcher m = mapTypeRegex.matcher(fieldElement.getType());
+        Matcher m = MAP_TYPE_REGEX.matcher(fieldElement.getType());
         if (m.matches()) {
             type = objectMapper.createObjectNode();
             type.put("type", "object");

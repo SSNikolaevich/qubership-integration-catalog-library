@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
- package org.qubership.integration.platform.catalog.util;
-
-import java.sql.Timestamp;
+package org.qubership.integration.platform.catalog.util;
 
 import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+
+import java.sql.Timestamp;
 
  public class MapperUtils {
 

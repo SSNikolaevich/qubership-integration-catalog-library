@@ -16,13 +16,12 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.repository.chain;
 
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
-import org.qubership.integration.platform.catalog.persistence.configs.repository.common.CommonRepository;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.LockModeType;
 import jakarta.validation.constraints.NotEmpty;
-
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.ChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.entity.chain.element.SwimlaneChainElement;
+import org.qubership.integration.platform.catalog.persistence.configs.repository.common.CommonRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
@@ -117,14 +116,14 @@ public interface ElementRepository extends CommonRepository<ChainElement>, JpaRe
             Collection<String> deploymentIds
     );
 
-    @Query("SELECT e " +
-            "FROM elements e " +
-            "INNER JOIN deployments d " +
-            "ON e.snapshot.id = d.snapshot.id " +
-            "WHERE " +
-            "e.type IN :types " +
-            "AND d.chain.id = :chainId " +
-            "AND d.id <> :excludeDeploymentId")
+    @Query("SELECT e "
+            + "FROM elements e "
+            + "INNER JOIN deployments d "
+            + "ON e.snapshot.id = d.snapshot.id "
+            + "WHERE "
+            + "e.type IN :types "
+            + "AND d.chain.id = :chainId "
+            + "AND d.id <> :excludeDeploymentId")
     List<ChainElement> findDeployedElementsByTypesAndChainId(
             Collection<String> types,
             String chainId,
@@ -146,11 +145,11 @@ public interface ElementRepository extends CommonRepository<ChainElement>, JpaRe
     @Query("SELECT e FROM elements e INNER JOIN deployments d ON e.snapshot.id = d.snapshot.id WHERE e.type IN :types")
     Collection<ChainElement> findAllDeployedElementsByTypes(Collection<String> types);
 
-    @Query("SELECT e " +
-            "FROM elements e " +
-            "INNER JOIN deployments d " +
-            "ON e.snapshot.id = d.snapshot.id " +
-            "WHERE e.type IN :types AND d.chain.id <> :excludeChainId")
+    @Query("SELECT e "
+            + "FROM elements e "
+            + "INNER JOIN deployments d "
+            + "ON e.snapshot.id = d.snapshot.id "
+            + "WHERE e.type IN :types AND d.chain.id <> :excludeChainId")
     List<ChainElement> findElementsForRouteExistenceCheck(
             List<String> types,
             String excludeChainId);
@@ -165,5 +164,5 @@ public interface ElementRepository extends CommonRepository<ChainElement>, JpaRe
     void deleteAllByChainId(String chainId);
 
     @Query("SELECT e.type FROM elements e GROUP BY e.type")
-    List<String> findAllGroupByType ();
+    List<String> findAllGroupByType();
 }

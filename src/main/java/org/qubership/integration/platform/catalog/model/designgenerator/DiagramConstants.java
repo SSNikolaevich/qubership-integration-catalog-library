@@ -16,16 +16,16 @@
 
 package org.qubership.integration.platform.catalog.model.designgenerator;
 
-import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramLangType.MERMAID;
-import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramLangType.PLANT_UML;
-import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramOperationType.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramLangType.MERMAID;
+import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramLangType.PLANT_UML;
+import static org.qubership.integration.platform.catalog.model.designgenerator.DiagramOperationType.*;
 
 public class DiagramConstants {
 
@@ -69,8 +69,8 @@ public class DiagramConstants {
 
         operationsMap.put(START_COLORED_GROUP,
                 createOperation(
-                        "rect rgb(" + ARG_PLACEHOLDER + ", " + ARG_PLACEHOLDER + ", " + ARG_PLACEHOLDER + ");\n" +
-                                "note right of " + ARG_PLACEHOLDER + " : " + ARG_PLACEHOLDER
+                        "rect rgb(" + ARG_PLACEHOLDER + ", " + ARG_PLACEHOLDER + ", " + ARG_PLACEHOLDER + ");\n"
+                                + "note right of " + ARG_PLACEHOLDER + " : " + ARG_PLACEHOLDER
                 ));
 
         buildLines(operationsMap, "->>", "-->>", "-)", "--)");
@@ -94,7 +94,7 @@ public class DiagramConstants {
         ));
         operationsMap.put(DELAY, createOperation("..."));
 
-        buildLines(operationsMap, "->", "-->","->>", "-->>");
+        buildLines(operationsMap, "->", "-->", "->>", "-->>");
         fillCommonOperations(operationsMap);
 
         operations.put(PLANT_UML, operationsMap);

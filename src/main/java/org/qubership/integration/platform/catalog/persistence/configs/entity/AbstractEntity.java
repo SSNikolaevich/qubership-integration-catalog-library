@@ -16,6 +16,7 @@
 
 package org.qubership.integration.platform.catalog.persistence.configs.entity;
 
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,15 +24,13 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.qubership.integration.platform.catalog.service.difference.DifferenceMember;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import org.qubership.integration.platform.catalog.service.difference.DifferenceMember;
-
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -96,13 +95,14 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 
     @PreUpdate
     public void preUpdate() {
-        if (this.createdWhen == null)
+        if (this.createdWhen == null) {
             this.createdWhen = this.modifiedWhen;
+        }
     }
 
     @Override
     public int compareTo(@NotNull AbstractEntity abstractEntity) {
         return Comparator.comparing(AbstractEntity::getId)
-                .compare(this,abstractEntity);
+                .compare(this, abstractEntity);
     }
 }
