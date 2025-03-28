@@ -1,0 +1,92 @@
+# Copyright 2024-2025 NetCracker Technology Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: redis-trigger
+title: Redis Trigger
+description: Trigger, that subscribes to pub/sub messages from Redis
+type: trigger
+folder: triggers
+inputEnabled: false
+colorType: trigger
+outputEnabled: true
+container: false
+designParameters:
+  externalParticipantId: 'Redis ##{host}'
+  externalParticipantName: 'Redis ##{host}'
+  requestLineTitle: 'Get message from channel(s): ##{channels}'
+  directionToChain: true
+  hasResponse: false
+properties:
+  common:
+    # - name: kafkaConnection
+    #   title: Connection parameters
+    #   type: custom
+    #   uiComponent: kafka-connection-2
+    #   validation:
+    #     conditions:
+    #       - property: connectionSourceType
+    #         equalTo: 'maas'
+    #         mandatoryProperties: [ 'topicsClassifierName' ]
+    #       - property: connectionSourceType
+    #         equalTo: 'manual'
+    #         mandatoryProperties: [
+    #           'brokers',
+    #           'securityProtocol',
+    #           'saslMechanism',
+    #           'topics'
+    #         ]
+    - name: host
+      title: Host
+      type: string
+      mandatory: true
+    - name: port
+      title: Port
+      type: number
+      mandatory: true
+      default: 6379
+    - name: username
+      title: username
+      type: string
+    - name: password
+      title: Password
+      type: string
+    - name: channels
+      title: channels
+      description: List of topic names or name patterns to subscribe to. Multiple names can be separated by comma.
+      query: true
+      mandatory: true
+      type: string
+    - name: serializer
+      title: Serializer
+      description: Message serializer to use
+      type: string
+      default: org.springframework.data.redis.serializer.StringRedisSerializer
+      allowedValues:
+        - org.springframework.data.redis.serializer.StringRedisSerializer
+        - org.springframework.data.redis.serializer.ByteArrayRedisSerializer
+        - org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
+        - org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+  advanced:
+    - name: connectionTimeout
+      title: Connection timeout (ms)
+      type: number
+      default: 2000
+    - name: readTimeout
+      title: Read timeout (ms)
+      type: number
+      default: 2000
+    - name: ssl
+      title: Use SSL
+      type: boolean
+      default: false

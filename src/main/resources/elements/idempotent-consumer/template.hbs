@@ -1,0 +1,14 @@
+<step id="{{identifier}}">
+    <idempotentConsumer
+        idempotentRepository="{{identifier}}"
+        eager="{{property 'eager'}}"
+        completionEager="{{property 'completionEager'}}"
+        skipDuplicate="{{property 'skipDuplicate'}}"
+        removeOnFailure="{{property 'removeOnFailure'}}"
+    >
+        <simple>
+            {{escape (property 'expression')}}
+        </simple>
+        <toD uri='direct:{{identifier}}'/>
+    </idempotentConsumer>
+</step>

@@ -59,6 +59,8 @@ public final class CamelNames {
     public static final String CHAIN_CALL_2_COMPONENT = "chain-call-2";
     public static final String PUBSUB_TRIGGER_COMPONENT = "pubsub-trigger";
     public static final String PUBSUB_SENDER_COMPONENT = "pubsub-sender";
+    public static final String REDIS_TRIGGER_COMPONENT = "redis-trigger";
+    public static final String REDIS_SENDER_COMPONENT = "redis-sender";
 
     public static final String SYSTEM = "System";
     public static final String EXTERNAL_SYSTEM = "externalSystem";
