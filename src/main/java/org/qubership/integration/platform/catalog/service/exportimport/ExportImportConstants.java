@@ -88,7 +88,7 @@ public class ExportImportConstants {
     public static final String DESCRIPTION = "description";
     public static final String ELEMENT_TYPE = "element-type";
     public static final String SWIMLANE_ID = "swimlane-id";
-    public static final String FILE_NAME_PROPERTY = "properties-filename";
+    public static final String FILE_NAME_PROPERTY = "propertiesFilename";
     public static final String PROPERTIES = "properties";
     public static final String CHILDREN = "children";
     public static final String MASKING_ENABLED = "maskingEnabled";
